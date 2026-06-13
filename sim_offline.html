@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Сим — помощник СМ.СИТИ</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Golos Text',sans-serif;background:#e8e8e8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px 14px 36px}
+.page{width:100%;max-width:400px;display:flex;flex-direction:column;gap:8px}
+.brand{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:#fff;border:2px solid #000;box-shadow:3px 3px 0 #000}
+.brand-logo{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:800;color:#000;letter-spacing:.06em}
+.brand-meta{font-size:10px;color:#888;text-align:right;line-height:1.5}
+.brand-meta strong{color:#000;font-weight:600}
+.widget{background:#fff;border:2px solid #000;box-shadow:4px 4px 0 #000}
+.w-hdr{background:#000;padding:11px 13px;display:flex;align-items:center;gap:10px}
+.w-ava{width:34px;height:34px;border:2px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Unbounded',sans-serif;font-size:9px;font-weight:800;color:#fff;letter-spacing:.04em}
+.w-nm{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;color:#fff;letter-spacing:.03em}
+.w-st{font-size:10px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:5px;margin-top:3px}
+.wdot{width:6px;height:6px;background:#4ade80;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.w-tabs{display:flex;background:#f5f5f5;border-bottom:2px solid #000}
+.w-tab{flex:1;padding:9px 4px;font-size:10px;font-family:'Golos Text',sans-serif;font-weight:700;color:#aaa;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;position:relative;top:2px;text-transform:uppercase;letter-spacing:.05em;transition:all .13s}
+.w-tab.active{color:#000;border-bottom-color:#000;background:#fff}
+.pane{display:none;flex-direction:column}
+.pane.active{display:flex}
+.cp{padding:14px;gap:11px}
+.flbl{font-size:9.5px;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.pills{display:flex;gap:4px;flex-wrap:wrap}
+.pill{padding:5px 11px;font-size:10.5px;font-weight:600;border:2px solid #000;background:#fff;color:#000;cursor:pointer;transition:all .12s;font-family:'Golos Text',sans-serif;text-transform:uppercase}
+.pill.on{background:#000;color:#fff}
+.pill:hover:not(.on){background:#f0f0f0}
+.srow{display:flex;align-items:center;gap:10px}
+.sval{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;color:#000;min-width:70px;text-align:right;flex-shrink:0}
+input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:linear-gradient(to right,#000 var(--pct,50%),#ddd var(--pct,50%));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:#000;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 2px #000}
+.srange{display:flex;justify-content:space-between}
+.srange span{font-size:9px;color:#aaa}
+.tog{display:flex;border:2px solid #000}
+.tbtn{flex:1;padding:7px 4px;font-size:10px;font-family:'Golos Text',sans-serif;font-weight:700;color:#aaa;cursor:pointer;border:none;background:#f5f5f5;transition:all .12s;text-align:center;text-transform:uppercase}
+.tbtn.on{background:#000;color:#fff}
+.div{height:1px;background:#e0e0e0}
+.result-btn{width:100%;background:#000;border:none;padding:0;cursor:pointer;overflow:hidden;text-align:left;font-family:'Golos Text',sans-serif}
+.result-btn:hover{opacity:.88}
+.rb-top{padding:12px 13px 8px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.rb-count{font-size:9.5px;color:rgba(255,255,255,.55);margin-bottom:3px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.rb-price{font-family:'Unbounded',sans-serif;font-size:17px;font-weight:800;color:#fff;line-height:1}
+.rb-price-sub{font-size:9.5px;color:rgba(255,255,255,.5);margin-top:3px}
+.rb-av{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;color:#fff;text-align:right}
+.rb-al{font-size:9px;color:rgba(255,255,255,.45);margin-top:2px;text-transform:uppercase;text-align:right}
+.rb-tags{padding:0 13px 7px;display:flex;flex-wrap:wrap;gap:4px}
+.rb-tag{border:1px solid rgba(255,255,255,.25);padding:2px 7px;font-size:9.5px;color:rgba(255,255,255,.8);text-transform:uppercase}
+.rb-action{background:rgba(255,255,255,.08);padding:8px 13px;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase}
+.result-btn.empty{background:#f5f5f5;border:2px solid #000}
+.rb-ei{padding:13px}
+.rb-en{font-size:12px;color:#000;font-weight:600}
+.note{font-size:9px;color:#aaa;text-align:center;line-height:1.6}
+.chat-p{background:#f5f5f5}
+.msgs{height:400px;padding:12px;display:flex;flex-direction:column;gap:8px;overflow-y:auto}
+.msg{max-width:90%;font-size:12px;line-height:1.6;animation:mi .18s ease}
+@keyframes mi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.mr{display:flex;align-items:flex-start;gap:7px;align-self:flex-start;max-width:94%}
+.mi-av{width:26px;height:26px;background:#000;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-family:'Unbounded',sans-serif;font-size:7px;font-weight:800;color:#fff}
+.mb{background:#fff;border:2px solid #000;border-left:4px solid #000;padding:8px 10px;color:#000;font-size:12px}
+.mu{align-self:flex-end;background:#000;border:2px solid #000;padding:8px 10px;color:#fff;font-weight:600;font-size:12px}
+.typing{align-self:flex-start;display:none}
+.typing.vis{display:flex;align-items:flex-start;gap:7px}
+.tb{background:#fff;border:2px solid #000;border-left:4px solid #000;padding:9px 12px}
+.dots{display:flex;gap:3px;align-items:center}
+.dot{width:5px;height:5px;background:#000;animation:bl 1.3s infinite;opacity:.25}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.suggs{padding:0 10px 8px;display:flex;flex-wrap:wrap;gap:4px}
+.sg{background:#fff;border:2px solid #000;padding:4px 9px;font-size:10.5px;color:#000;cursor:pointer;transition:all .12s;font-family:'Golos Text',sans-serif;font-weight:500;text-transform:uppercase}
+.sg:hover{background:#000;color:#fff}
+.cir{display:flex;gap:6px;padding:9px 10px;border-top:2px solid #000;background:#fff;align-items:center}
+.cinp{flex:1;background:#f5f5f5;border:2px solid #000;padding:8px 11px;font-size:12px;color:#000;font-family:'Golos Text',sans-serif;outline:none}
+.cinp:focus{background:#fff}
+.cinp::placeholder{color:#bbb}
+.sbtn{width:34px;height:34px;background:#000;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sbtn svg{width:13px;height:13px;fill:#fff}
+.cnt-p{padding:13px;gap:10px}
+.cnt-head{font-size:9.5px;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.ocard{background:#f5f5f5;border:2px solid #000;border-left:4px solid #000;padding:10px 12px}
+.oname{font-size:12px;font-weight:700;color:#000;margin-bottom:2px;text-transform:uppercase}
+.oaddr{font-size:11.5px;color:#444}
+.hrow{display:flex;justify-content:space-between;font-size:11px;margin-top:2px}
+.hrow span:first-child{color:#555}
+.hrow span:last-child{font-weight:700;color:#000}
+.soc-row{display:flex;gap:6px}
+.soc-btn{flex:1;background:#fff;border:2px solid #000;padding:8px 10px;text-decoration:none;text-align:center;transition:all .12s}
+.soc-btn:hover{background:#000}.soc-btn:hover .soc-title,.soc-btn:hover .soc-sub{color:#fff}
+.soc-title{font-size:11px;font-weight:700;color:#000;text-transform:uppercase}
+.soc-sub{font-size:9.5px;color:#888;margin-top:2px}
+.phone-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#000;border:2px solid #000;text-decoration:none;box-shadow:3px 3px 0 #444}
+.phi{width:32px;height:32px;border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.phi svg{width:15px;height:15px;fill:rgba(255,255,255,.8)}
+.pnum{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.ptm{font-size:10px;color:rgba(255,255,255,.45);margin-top:2px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#ccc}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="brand">
+  <div class="brand-logo">СМ.СИТИ</div>
+  <div class="brand-meta"><strong>9 жилых комплексов</strong><br>Красноярск · с 2006 г.</div>
+</div>
+<div class="widget">
+  <div class="w-hdr">
+    <div class="w-ava">СМ</div>
+    <div>
+      <div class="w-nm">Сим — помощник СМ.СИТИ</div>
+      <div class="w-st"><div class="wdot"></div>онлайн · отвечаю на любой вопрос</div>
+    </div>
+  </div>
+  <div class="w-tabs">
+    <button class="w-tab active" id="tc" onclick="sw('c')">Подобрать</button>
+    <button class="w-tab" id="tm" onclick="sw('m')">Спросить</button>
+    <button class="w-tab" id="tk" onclick="sw('k')">Контакты</button>
+  </div>
+  <div class="pane cp active" id="pc">
+    <div><div class="flbl">Комнат</div>
+      <div class="pills" id="pt">
+        <div class="pill on" data-v="all" onclick="sp(this,'pt')">Все</div>
+        <div class="pill" data-v="1" onclick="sp(this,'pt')">1к</div>
+        <div class="pill" data-v="2" onclick="sp(this,'pt')">2к</div>
+        <div class="pill" data-v="3" onclick="sp(this,'pt')">3к</div>
+      </div>
+    </div>
+    <div><div class="flbl">Район</div>
+      <div class="pills" id="pr">
+        <div class="pill on" data-v="all" onclick="sp(this,'pr')">Любой</div>
+        <div class="pill" data-v="sov" onclick="sp(this,'pr')">Советский</div>
+        <div class="pill" data-v="cen" onclick="sp(this,'pr')">Центральный</div>
+        <div class="pill" data-v="okt" onclick="sp(this,'pr')">Октябрьский</div>
+        <div class="pill" data-v="kir" onclick="sp(this,'pr')">Кировский</div>
+      </div>
+    </div>
+    <div><div class="flbl">Бюджет</div>
+      <div class="srow">
+        <input type="range" id="bsl" min="4000000" max="22000000" step="100000" value="9000000" oninput="os(this)">
+        <div class="sval" id="bv">9 млн</div>
+      </div>
+      <div class="srange"><span>4 млн</span><span>22 млн</span></div>
+    </div>
+    <div><div class="flbl">Оплата</div>
+      <div class="tog">
+        <button class="tbtn on" id="pf" onclick="sp2('full')">Полная стоимость</button>
+        <button class="tbtn" id="pi" onclick="sp2('ip')">Ипотека</button>
+      </div>
+    </div>
+    <div id="vzn-block" style="display:none">
+      <div class="flbl">Первоначальный взнос</div>
+      <div class="srow">
+        <input type="range" id="vzsl" min="10" max="80" step="5" value="20" oninput="ov(this)">
+        <div class="sval" id="vzv">20%</div>
+      </div>
+      <div class="srange"><span>10%</span><span>80%</span></div>
+    </div>
+    <div class="div"></div>
+    <div id="rb-wrap"></div>
+    <div class="note" id="cn" style="display:none">Семейная ипотека 6% · срок 25 лет · расчёт ориентировочный</div>
+  </div>
+  <div class="pane chat-p" id="pm">
+    <div class="msgs" id="msgs">
+      <div class="mr">
+        <div class="mi-av">СМ</div>
+        <div class="msg mb">Привет! Я Сим — помощник СМ.СИТИ. Задайте любой вопрос о наших жилых комплексах, ценах, ипотеке или компании.</div>
+      </div>
+      <div class="typing" id="ty">
+        <div class="mi-av">СМ</div>
+        <div class="tb"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+      </div>
+    </div>
+    <div class="suggs" id="sgs">
+      <span class="sg" onclick="ask(this.textContent)">Все ЖК</span>
+      <span class="sg" onclick="ask(this.textContent)">О компании</span>
+      <span class="sg" onclick="ask(this.textContent)">Взлётный</span>
+      <span class="sg" onclick="ask(this.textContent)">Южный Берег</span>
+      <span class="sg" onclick="ask(this.textContent)">Семейная ипотека</span>
+      <span class="sg" onclick="ask(this.textContent)">IT-ипотека</span>
+      <span class="sg" onclick="ask(this.textContent)">Цены на 2к</span>
+      <span class="sg" onclick="ask(this.textContent)">Рассрочка</span>
+    </div>
+    <div class="cir">
+      <input class="cinp" id="ci" placeholder="Задайте любой вопрос..." onkeydown="if(event.key==='Enter')snd()">
+      <button class="sbtn" onclick="snd()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button>
+    </div>
+  </div>
+  <div class="pane cnt-p" id="pk">
+    <div class="cnt-head">Офисы продаж</div>
+    <div class="ocard">
+      <div class="oname">Парусная</div>
+      <div class="oaddr">ул. Парусная, 8, пом. 251–252</div>
+      <div class="hrow"><span>Пн–Пт</span><span>9:00–18:00</span></div>
+      <div class="hrow"><span>Суббота</span><span>11:00–16:00</span></div>
+      <div class="hrow"><span>Воскресенье</span><span>выходной</span></div>
+    </div>
+    <div class="ocard">
+      <div class="oname">Мира</div>
+      <div class="oaddr">пр. Мира, 91</div>
+      <div class="hrow"><span>Пн–Пт</span><span>9:00–18:00</span></div>
+      <div class="hrow"><span>Суббота</span><span>11:00–16:00</span></div>
+    </div>
+    <div class="soc-row">
+      <a href="https://www.sm-city.ru" target="_blank" class="soc-btn"><div class="soc-title">sm-city.ru</div><div class="soc-sub">Официальный сайт</div></a>
+      <a href="https://vk.com/smcity_krsk" target="_blank" class="soc-btn"><div class="soc-title">ВКонтакте</div><div class="soc-sub">Новости и акции</div></a>
+    </div>
+  </div>
+</div>
+<a class="phone-bar" href="tel:+73912779901">
+  <div class="phi"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+  <div><div class="pnum">+7 (391) 277-99-01</div><div class="ptm">Пн–Пт 9:00–18:00 · Сб 11:00–16:00</div></div>
+</a>
+</div>
+
+<script>
+const KB = [
+  {keys:['все жк','список жк','какие жк','все комплекс','перечень','9 жк','что строит','объекты'],
+   answer:`СМ.СИТИ строит 9 жилых комплексов в Красноярске:\n\n1. ВЗЛЁТНЫЙ — Советский р-н, комфорт\n2. НОВЫЙ ACADEM — Академгородок, комфорт+\n3. ЮЖНЫЙ БЕРЕГ — Центральный р-н, бизнес\n4. БЕЛЫЙ КВАРТАЛ (Свободный) — Октябрьский, стандарт+\n5. БЕЛЫЙ КВАРТАЛ (Спандаряна) — Центральный, стандарт+\n6. ВРЕМЕНА — Советский р-н, комфорт\n7. ДАО — Октябрьский р-н, комфорт\n8. ОКТА — Кировский р-н, комфорт\n9. КЕЦХОВЕЛИ — Центральный р-н, бизнес\n\nВсе дома кирпичные. О каком рассказать подробнее?`},
+  {keys:['о компании','что такое см','см.сити','ситимаркетинг','история','когда основан','сколько построил','о вас','кто вы'],
+   answer:`СМ.СИТИ (ООО «Ситимаркетинг») — один из ведущих девелоперов Красноярска.\n\nОснована в 2006 году, построено более 1 000 000 кв.м жилья. 2-е место в Красноярском крае, доля рынка 9,79%, 110-е место в РФ (ЕРЗ.РФ, 2026).\n\nСтроим только из кирпича. Концепция «Удобный город». Телефон: +7 (391) 277-99-01.`},
+  {keys:['взлётный','взлетный','взлётка','взлетка'],
+   answer:`ЖК ВЗЛЁТНЫЙ — Советский р-н (Взлётка). Класс: Комфорт, кирпич.\nЗакрытый двор, подземная парковка, рядом парки, школы, ТЦ «Планета».\n\n1-комн: 38–52 м², от 5,7 до 7,7 млн ₽\n2-комн: 58–72 м², от 8,6 до 10,7 млн ₽\n3-комн: 82–98 м², от 11,9 до 14,3 млн ₽\n\nЗаписать вас на просмотр?`},
+  {keys:['новый academ','новый акад','академгородок','academ','акад'],
+   answer:`ЖК НОВЫЙ ACADEM — Академгородок (Октябрьский р-н). Класс: Комфорт+, кирпич.\nТихий район, рядом СФУ и МВДЦ «Сибирь», панорамное остекление.\n\n1-комн: 40–54 м², от 6,5 до 8,5 млн ₽\n2-комн: 62–78 м², от 9,6 до 12,1 млн ₽\n3-комн: 86–104 м², от 13,3 до 15,8 млн ₽`},
+  {keys:['южный берег','южный','набережная','енисей','татышев'],
+   answer:`ЖК ЮЖНЫЙ БЕРЕГ — Центральный р-н, набережная Енисея. Класс: Бизнес, кирпич.\nПанорама на Енисей и остров Татышев, консьерж, закрытая территория.\n\n1-комн: 44–58 м², от 7,7 до 9,7 млн ₽\n2-комн: 66–84 м², от 11,1 до 13,8 млн ₽\n3-комн: 92–112 м², от 15,5 до 18,5 млн ₽`},
+  {keys:['белый квартал','белый','спандаряна','свободный'],
+   answer:`У СМ.СИТИ два ЖК «БЕЛЫЙ КВАРТАЛ» (оба кирпич, стандарт+):\n\n1. На Свободном (Октябрьский р-н) — от 5,4 млн ₽ (1к) до 13,2 млн ₽ (3к)\n2. На Спандаряна (Центральный р-н) — от 5,7 млн ₽ (1к) до 13,5 млн ₽ (3к)\n\nАвторская архитектура в белых тонах. Какой ближе по локации?`},
+  {keys:['времена'],
+   answer:`ЖК ВРЕМЕНА — Советский р-н. Класс: Комфорт, кирпич.\nНесколько очередей строительства, рядом парк «Северный».\n\n1-комн: 40–52 м², от 6,1 до 7,7 млн ₽\n2-комн: 60–74 м², от 8,9 до 11,0 млн ₽\n3-комн: 82–98 м², от 12,1 до 14,5 млн ₽`},
+  {keys:['дао'],
+   answer:`ЖК ДАО — Октябрьский р-н. Класс: Комфорт, кирпич.\nЗакрытый двор с авторским озеленением, концепция «гармония пространства».\n\n1-комн: 38–52 м², от 5,9 до 7,5 млн ₽\n2-комн: 58–72 м², от 8,7 до 10,7 млн ₽\n3-комн: 80–96 м², от 11,9 до 14,1 млн ₽`},
+  {keys:['окта'],
+   answer:`ЖК ОКТА — Кировский р-н. Класс: Комфорт, кирпич.\nХорошая транспортная доступность, рядом набережная Енисея.\n\n1-комн: 38–50 м², от 5,8 до 7,3 млн ₽\n2-комн: 56–72 м², от 8,5 до 10,5 млн ₽\n3-комн: 80–96 м², от 11,7 до 13,9 млн ₽`},
+  {keys:['кецховели','кецхо'],
+   answer:`ЖК КЕЦХОВЕЛИ — Центральный р-н. Класс: Бизнес, кирпич.\nВ самом центре, рядом площадь Революции, театры, рестораны. Камерный дом.\n\n1-комн: 44–58 м², от 7,1 до 9,1 млн ₽\n2-комн: 64–82 м², от 10,4 до 12,9 млн ₽\n3-комн: 88–108 м², от 14,3 до 17,2 млн ₽`},
+  {keys:['семейная ипотека','семейная','ипотека детьми','ипотека с ребёнком','ипотека с ребенком','6%','шесть процентов'],
+   answer:`Семейная ипотека — самая выгодная программа.\n\nСтавка от 6% годовых. Для семей с ребёнком до 18 лет.\nДо 12 млн ₽, взнос от 20%, срок до 30 лет.\nБанки: Сбербанк, ВТБ, Альфа-Банк, Дом.РФ.\n\nПримеры платежа (взнос 20%, 25 лет):\n6 млн → ~30 900 ₽/мес\n9 млн → ~46 400 ₽/мес\n12 млн → ~61 900 ₽/мес\n\nОставьте номер — рассчитаем точно под вас!`},
+  {keys:['it ипотека','it-ипотека','айти ипотека','ит ипотека','it специалист','айтишник'],
+   answer:`IT-ипотека — для сотрудников технологических компаний.\n\nСтавка от 6% годовых. До 18 млн ₽ (больше чем семейная).\nВзнос от 20%, срок до 30 лет.\nТребование: работа в аккредитованной IT-компании из реестра Минцифры, возраст до 50 лет.\n\nПодходит для крупных квартир в ЖК Южный Берег и Кецховели.`},
+  {keys:['рассрочка','стандартная ипотека','рыночная','ипотека без льгот','обычная ипотека'],
+   answer:`Варианты оплаты в СМ.СИТИ:\n\n• Рассрочка от застройщика — индивидуальные условия, уточняйте у менеджера\n• Стандартная ипотека — от 23% годовых, для всех без ограничений, любой банк-партнёр\n\nДля подбора оптимального варианта звоните: +7 (391) 277-99-01`},
+  {keys:['цены на 1к','однокомнат','1 комнат','1-комн','однушк','студи'],
+   answer:`1-комнатные квартиры СМ.СИТИ:\n\nБЕЛЫЙ КВАРТАЛ (Своб.): от 5,4 млн ₽\nВЗЛЁТНЫЙ: от 5,7 млн ₽\nОКТА: от 5,8 млн ₽\nДАО: от 5,9 млн ₽\nВРЕМЕНА: от 6,1 млн ₽\nНОВЫЙ ACADEM: от 6,5 млн ₽\nКЕЦХОВЕЛИ: от 7,1 млн ₽\nЮЖНЫЙ БЕРЕГ: от 7,7 млн ₽\n\nМинимум от 5,4 млн ₽. По семейной ипотеке — от 27 900 ₽/мес.`},
+  {keys:['цены на 2к','двухкомнат','2 комнат','2-комн','двушк','цены 2к'],
+   answer:`2-комнатные квартиры СМ.СИТИ:\n\nБЕЛЫЙ КВАРТАЛ (Своб.): от 7,9 млн ₽\nОКТА: от 8,5 млн ₽\nВЗЛЁТНЫЙ: от 8,6 млн ₽\nДАО: от 8,7 млн ₽\nВРЕМЕНА: от 8,9 млн ₽\nНОВЫЙ ACADEM: от 9,6 млн ₽\nКЕЦХОВЕЛИ: от 10,4 млн ₽\nЮЖНЫЙ БЕРЕГ: от 11,1 млн ₽\n\nПо семейной ипотеке — от 40 700 ₽/мес.`},
+  {keys:['цены на 3к','трёхкомнат','трехкомнат','3 комнат','3-комн','трёшк','трешк'],
+   answer:`3-комнатные квартиры СМ.СИТИ:\n\nБЕЛЫЙ КВАРТАЛ (Своб.): от 11,2 млн ₽\nОКТА: от 11,7 млн ₽\nВЗЛЁТНЫЙ / ДАО: от 11,9 млн ₽\nВРЕМЕНА: от 12,1 млн ₽\nНОВЫЙ ACADEM: от 13,3 млн ₽\nКЕЦХОВЕЛИ: от 14,3 млн ₽\nЮЖНЫЙ БЕРЕГ: от 15,5 млн ₽\n\nСамые просторные — в Южном Берегу, до 112 м².`},
+  {keys:['советский','взлётка','советский район'],
+   answer:`В Советском районе два ЖК:\n\n• ВЗЛЁТНЫЙ (Взлётка) — комфорт, 1к от 5,7 млн ₽\n• ВРЕМЕНА — комфорт, рядом парк «Северный», 1к от 6,1 млн ₽\n\nОба кирпичные, с закрытыми дворами. Рассказать подробнее?`},
+  {keys:['центральный','центр города','центр','площадь революции'],
+   answer:`В Центральном районе три ЖК:\n\n• ЮЖНЫЙ БЕРЕГ — бизнес, набережная, 1к от 7,7 млн ₽\n• БЕЛЫЙ КВАРТАЛ (Спандаряна) — стандарт+, 1к от 5,7 млн ₽\n• КЕЦХОВЕЛИ — бизнес, самый центр, 1к от 7,1 млн ₽\n\nПешая доступность до всего центра.`},
+  {keys:['октябрьский'],
+   answer:`В Октябрьском районе три ЖК:\n\n• НОВЫЙ ACADEM — комфорт+, Академгородок, 1к от 6,5 млн ₽\n• БЕЛЫЙ КВАРТАЛ (Свободный) — стандарт+, 1к от 5,4 млн ₽ (минимум среди всех)\n• ДАО — комфорт, 1к от 5,9 млн ₽`},
+  {keys:['кировск'],
+   answer:`В Кировском районе один ЖК — ОКТА.\nКомфорт-класс, кирпич, хорошая транспортная доступность, рядом набережная.\n\n1-комн: от 5,8 млн ₽\n2-комн: от 8,5 млн ₽\n3-комн: от 11,7 млн ₽`},
+  {keys:['почему кирпич','кирпич','материал','из чего стро','технология строит'],
+   answer:`СМ.СИТИ строит только из кирпича — это принцип компании с 2006 года.\n\n• Лучшая тепло- и звукоизоляция чем у панели\n• Сохраняет тепло зимой и прохладу летом — важно в Сибири\n• Долговечность 100+ лет\n• Экологичный натуральный материал\n• Выше ликвидность при перепродаже`},
+  {keys:['эскроу','214','защита','деньги покупател','долевое','обман','застройщик обанкрот'],
+   answer:`Все новостройки СМ.СИТИ — через счета эскроу по 214-ФЗ.\n\nДеньги покупателя хранятся в банке и передаются застройщику только после сдачи дома. Если что-то пойдёт не так — вы получаете деньги обратно. Это максимальная защита по закону.`},
+  {keys:['материнск','маткапитал','капитал'],
+   answer:`Да, материнский капитал принимается:\n• как часть первоначального взноса по ипотеке\n• для частичного погашения кредита\n\nМенеджер поможет с документами и Пенсионным фондом. Звоните: +7 (391) 277-99-01`},
+  {keys:['дешёв','дешев','бюджет','недорог','минимальн','самая низк','подешевле'],
+   answer:`Самый доступный вариант — БЕЛЫЙ КВАРТАЛ (Свободный), Октябрьский р-н:\n1-комн. от 5,4 млн ₽ (36 м²).\n\nПо семейной ипотеке 6% (взнос 20%, 25 лет) — платёж ~27 900 ₽/мес.\n\nТакже доступны ВЗЛЁТНЫЙ, ОКТА, ДАО — от 5,7–5,9 млн ₽.`},
+  {keys:['дорог','премиум','элитн','бизнес класс','бизнес-класс','люкс'],
+   answer:`Бизнес-класс — два ЖК:\n\n• ЮЖНЫЙ БЕРЕГ — набережная Енисея, до 18,5 млн ₽, 168 000 ₽/м²\n• КЕЦХОВЕЛИ — центр города, до 17,2 млн ₽, 162 000 ₽/м²\n\nОба с консьержем, закрытой территорией, премиальной отделкой.`},
+  {keys:['средняя цена','квадратн','цена метр','руб/кв','стоимость метр','за метр'],
+   answer:`Средние цены за м² по ЖК:\n\nБЕЛЫЙ КВАРТАЛ: 143–145 тыс ₽\nОКТА: 146 тыс ₽\nДАО: 147 тыс ₽\nВРЕМЕНА: 148 тыс ₽\nВЗЛЁТНЫЙ: 149 тыс ₽\nНОВЫЙ ACADEM: 156 тыс ₽\nКЕЦХОВЕЛИ: 162 тыс ₽\nЮЖНЫЙ БЕРЕГ: 168 тыс ₽\n\nСредняя по компании ~149 200 ₽/м².`},
+  {keys:['парков','машиномест','машино-мест','гараж','паркинг'],
+   answer:`Во многих ЖК есть подземная парковка (например, ВЗЛЁТНЫЙ). Стоимость машино-места зависит от конкретного ЖК и этажа паркинга.\n\nТочную цену уточнит менеджер: +7 (391) 277-99-01`},
+  {keys:['срок','когда постро','когда сдача','когда сдад','готовность','ввод'],
+   answer:`Сроки сдачи зависят от конкретного ЖК и корпуса. Актуальные даты ввода — на сайте sm-city.ru или у менеджера по телефону +7 (391) 277-99-01.\n\nВсе объекты строятся по 214-ФЗ с эскроу-счетами.`},
+  {keys:['скидк','акци','спецпредложен','распродаж','выгодно'],
+   answer:`Текущие акции и спецпредложения публикуются в группе ВКонтакте (vk.com/smcity_krsk) и на сайте sm-city.ru. Условия регулярно меняются.\n\nУточните актуальные скидки у менеджера: +7 (391) 277-99-01`},
+  {keys:['записаться','просмотр','приехать','посмотреть квартиру','встреч','показ'],
+   answer:`Запись на просмотр бесплатна! Оставьте номер телефона — менеджер перезвонит в течение 15 минут и согласует удобное время.\n\nИли звоните: +7 (391) 277-99-01\nОфисы: ул. Парусная, 8 и пр. Мира, 91`},
+  {keys:['контакт','телефон','адрес','офис','как доехать','режим работ','часы работ','где вы'],
+   answer:`Контакты СМ.СИТИ:\n\nТелефон: +7 (391) 277-99-01\nСайт: sm-city.ru\n\nОфис 1: ул. Парусная, 8, пом. 251–252\nОфис 2: пр. Мира, 91\nРежим: пн–пт 9–18, сб 11–16, вс — выходной`},
+  {keys:['ипотек','кредит','банк','в рассрочк','платеж'],
+   answer:`СМ.СИТИ работает с программами:\n\n1. Семейная ипотека — от 6% (семьи с детьми)\n2. IT-ипотека — от 6% (айтишники)\n3. Стандартная — от 23% (для всех)\n4. Рассрочка от застройщика\n\nСамые выгодные — семейная и IT по 6%. Спросите подробнее про любую!`},
+  {keys:['сколько стоит','цена','стоимость','почём','почем'],
+   answer:`Цены на квартиры СМ.СИТИ:\n\n1-комнатные: от 5,4 до 9,1 млн ₽\n2-комнатные: от 7,9 до 13,8 млн ₽\n3-комнатные: от 11,2 до 18,5 млн ₽\n\nВоспользуйтесь вкладкой «Подобрать» или спросите про конкретный ЖК.`},
+  {keys:['рынок','позиция','конкурент','доля','место','рейтинг','лучш'],
+   answer:`Позиция СМ.СИТИ (март 2026):\n• 2-е место в Красноярском крае\n• Объём строительства 176 388 м²\n• Доля рынка 9,79%\n• 110-е место в рейтинге ЕРЗ.РФ\n\nЕдинственный девелопер Красноярска с ИИ-ассистентом для клиентов 24/7.`},
+  {keys:['24/7','круглосуточ','ночью','выходн','нерабоч','когда отвеч'],
+   answer:`Я работаю 24/7 — круглосуточно, без выходных и праздников!\n\nБолее половины покупателей изучают жильё вечером и в выходные, когда офис закрыт. Раньше они не получали ответа. Теперь я отвечаю мгновенно — спрашивайте что угодно в любое время.`},
+  {keys:['ии','искусственный интеллект','как работаешь','что ты','нейросет','бот','робот','живой'],
+   answer:`Я — Сим, ИИ-ассистент СМ.СИТИ на базе языковой модели Claude. \n\nОтвечаю на вопросы о квартирах, ценах и ипотеке за пару секунд, помогаю подобрать жильё и передаю ваш запрос менеджеру. Работаю круглосуточно. Я первый ИИ-помощник среди застройщиков Красноярска!`},
+  {keys:['отделк','ремонт','чистов','черновая','под ключ'],
+   answer:`Варианты отделки зависят от конкретного ЖК и квартиры — от предчистовой до готовой. Точную информацию по интересующей квартире уточнит менеджер.\n\nЗвоните: +7 (391) 277-99-01 или оставьте номер.`},
+  {keys:['привет','здравств','добрый','хай','хелло','начать'],
+   answer:`Здравствуйте! Я Сим, помощник СМ.СИТИ. Помогу подобрать квартиру в одном из 9 жилых комплексов, расскажу про цены и ипотеку.\n\nЧто вас интересует — конкретный ЖК, цены или условия ипотеки?`},
+  {keys:['спасибо','благодар','спс'],
+   answer:`Пожалуйста! Рад был помочь. Если появятся ещё вопросы — спрашивайте в любое время, я на связи 24/7.\n\nА чтобы обсудить покупку с менеджером — оставьте номер или звоните +7 (391) 277-99-01.`},
+];
+const DEFAULT='Спасибо за вопрос! По этой теме лучше проконсультирует наш менеджер — он знает все детали.\n\nЗвоните: +7 (391) 277-99-01 или оставьте номер — перезвоним в течение 15 минут.';
+function getAnswer(q){
+  const s=q.toLowerCase().replace(/ё/g,'е');
+  let best=null,bestScore=0;
+  for(const item of KB){
+    for(const k of item.keys){
+      const kk=k.replace(/ё/g,'е');
+      if(s.includes(kk) && kk.length>bestScore){best=item.answer;bestScore=kk.length}
+    }
+  }
+  return best||DEFAULT;
+}
+const PROJS=[
+  {id:'vzl',name:'ВЗЛЁТНЫЙ',dist:'sov',cls:'Комфорт',r1:{min:5700000,aMin:38,aMax:52},r2:{min:8600000,aMin:58,aMax:72},r3:{min:11900000,aMin:82,aMax:98}},
+  {id:'acad',name:'НОВЫЙ ACADEM',dist:'okt',cls:'Комфорт+',r1:{min:6500000,aMin:40,aMax:54},r2:{min:9600000,aMin:62,aMax:78},r3:{min:13300000,aMin:86,aMax:104}},
+  {id:'yb',name:'ЮЖНЫЙ БЕРЕГ',dist:'cen',cls:'Бизнес',r1:{min:7700000,aMin:44,aMax:58},r2:{min:11100000,aMin:66,aMax:84},r3:{min:15500000,aMin:92,aMax:112}},
+  {id:'bk1',name:'БЕЛЫЙ КВАРТАЛ (Своб.)',dist:'okt',cls:'Стандарт+',r1:{min:5400000,aMin:36,aMax:48},r2:{min:7900000,aMin:54,aMax:68},r3:{min:11200000,aMin:76,aMax:92}},
+  {id:'bk2',name:'БЕЛЫЙ КВАРТАЛ (Спан.)',dist:'cen',cls:'Стандарт+',r1:{min:5700000,aMin:38,aMax:50},r2:{min:8100000,aMin:56,aMax:70},r3:{min:11500000,aMin:78,aMax:94}},
+  {id:'vr',name:'ВРЕМЕНА',dist:'sov',cls:'Комфорт',r1:{min:6100000,aMin:40,aMax:52},r2:{min:8900000,aMin:60,aMax:74},r3:{min:12100000,aMin:82,aMax:98}},
+  {id:'dao',name:'ДАО',dist:'okt',cls:'Комфорт',r1:{min:5900000,aMin:38,aMax:52},r2:{min:8700000,aMin:58,aMax:72},r3:{min:11900000,aMin:80,aMax:96}},
+  {id:'ok',name:'ОКТА',dist:'kir',cls:'Комфорт',r1:{min:5800000,aMin:38,aMax:50},r2:{min:8500000,aMin:56,aMax:72},r3:{min:11700000,aMin:80,aMax:96}},
+  {id:'ke',name:'КЕЦХОВЕЛИ',dist:'cen',cls:'Бизнес',r1:{min:7100000,aMin:44,aMax:58},r2:{min:10400000,aMin:64,aMax:82},r3:{min:14300000,aMin:88,aMax:108}},
+];
+let sT='all',sD='all',bud=9000000,pay='full',vzn=20;
+function fm(n){return n>=1e6?(n/1e6).toFixed(1).replace('.0','')+'млн ₽':n.toLocaleString('ru')+'₽'}
+function fk(n){return Math.round(n).toLocaleString('ru')+' ₽'}
+function plr(n,a,b,c){const m=n%100,t=n%10;if(m>=11&&m<=14)return c;if(t===1)return a;if(t>=2&&t<=4)return b;return c}
+function ipm(P,a,y){const r=a/12/100,n=y*12;return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1)}
+function calcFlats(){
+  let pool=[];
+  PROJS.forEach(p=>{
+    if(sD!=='all'&&p.dist!==sD)return;
+    [1,2,3].filter(r=>sT==='all'||+sT===r).forEach(r=>{
+      const d=r===1?p.r1:r===2?p.r2:p.r3;
+      pool.push({name:p.name,cls:p.cls,rooms:r,minP:d.min,minA:d.aMin,maxA:d.aMax,monthly:Math.round(ipm(d.min*(1-vzn/100),6,25))});
+    });
+  });
+  return pool;
+}
+function sp(el,g){document.querySelectorAll('#'+g+' .pill').forEach(p=>p.classList.remove('on'));el.classList.add('on');if(g==='pt')sT=el.dataset.v;else sD=el.dataset.v;uc()}
+function os(el){bud=+el.value;el.style.setProperty('--pct',((bud-4e6)/18e6*100)+'%');document.getElementById('bv').textContent=(bud/1e6).toFixed(1).replace('.0','')+'млн';uc()}
+function ov(el){vzn=+el.value;el.style.setProperty('--pct',((vzn-10)/70*100)+'%');document.getElementById('vzv').textContent=vzn+'%';uc()}
+function sp2(m){pay=m;document.getElementById('pf').classList.toggle('on',m==='full');document.getElementById('pi').classList.toggle('on',m==='ip');document.getElementById('cn').style.display=m==='ip'?'block':'none';document.getElementById('vzn-block').style.display=m==='ip'?'block':'none';uc()}
+function sw(t){['c','m','k'].forEach(x=>{document.getElementById('t'+x).classList.toggle('active',x===t);document.getElementById('p'+x).classList.toggle('active',x===t)})}
+function goc(){sw('m');setTimeout(()=>ask('Записаться на просмотр'),300)}
+function uc(){
+  const pool=calcFlats();
+  const fits=pool.filter(f=>pay==='full'?f.minP<=bud:f.monthly<=(bud/12));
+  const wrap=document.getElementById('rb-wrap');
+  if(!fits.length){
+    const near=[...pool].sort((a,b)=>a.minP-b.minP)[0];
+    if(!near){wrap.innerHTML='<button class="result-btn empty" onclick="goc()"><div class="rb-ei"><div class="rb-en">Напишите Симу — подберём вариант</div></div></button>';return}
+    wrap.innerHTML='<button class="result-btn" onclick="goc()"><div class="rb-top"><div><div class="rb-count">Ближайший вариант</div><div class="rb-price">'+near.name+'</div><div class="rb-price-sub">'+near.rooms+'к · '+near.minA+'–'+near.maxA+'м² · от '+fm(near.minP)+'</div></div></div><div class="rb-action">Обсудить с менеджером</div></button>';return
+  }
+  const cnt=fits.length;
+  const names=[...new Set(fits.map(f=>f.name))];
+  const minP=Math.min(...fits.map(f=>f.minP));
+  const minM=Math.min(...fits.map(f=>f.monthly));
+  const show=pay==='full'?'от '+fm(minP):'от '+fk(minM)+'/мес';
+  const sub=pay==='full'?'полная стоимость':'ипотека 6% · взнос '+vzn+'% · 25 лет';
+  const clses=[...new Set(fits.map(f=>f.cls))].slice(0,3);
+  wrap.innerHTML='<button class="result-btn" onclick="goc()"><div class="rb-top"><div><div class="rb-count">'+cnt+' '+plr(cnt,'вариант','варианта','вариантов')+' в бюджете</div><div class="rb-price">'+show+'</div><div class="rb-price-sub">'+sub+'</div></div><div><div class="rb-av">'+names.length+' ЖК</div><div class="rb-al">в выборке</div></div></div><div class="rb-tags">'+clses.map(c=>'<span class="rb-tag">'+c+'</span>').join('')+'<span class="rb-tag">Кирпич</span></div><div class="rb-action">Посмотреть '+cnt+' '+plr(cnt,'вариант','варианта','вариантов')+'</div></button>';
+}
+function ask(q){
+  addMsg(q,'u');document.getElementById('sgs').style.display='none';
+  document.getElementById('ty').classList.add('vis');sc();
+  setTimeout(()=>{document.getElementById('ty').classList.remove('vis');addMsg(getAnswer(q),'b')}, 550+Math.random()*450);
+}
+function snd(){const i=document.getElementById('ci');const q=i.value.trim();if(!q)return;i.value='';ask(q)}
+function addMsg(text,who){
+  const wrap=document.getElementById('msgs'),ty=document.getElementById('ty');
+  if(who==='b'){const row=document.createElement('div');row.className='mr';row.innerHTML='<div class="mi-av">СМ</div><div class="msg mb">'+text.replace(/\n/g,'<br>')+'</div>';wrap.insertBefore(row,ty)}
+  else{const d=document.createElement('div');d.className='msg mu';d.textContent=text;wrap.insertBefore(d,ty)}
+  sc()
+}
+function sc(){document.getElementById('msgs').scrollTop=9999}
+os(document.getElementById('bsl'));
+</script>
+</body>
+</html>
